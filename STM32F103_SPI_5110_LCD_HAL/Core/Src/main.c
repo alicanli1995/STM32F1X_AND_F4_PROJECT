@@ -46,7 +46,7 @@ DMA_HandleTypeDef hdma_spi2_tx;
 
 /* USER CODE BEGIN PV */
 #define DELAY   2000
-uint8_t menu_sec=0,menu_say=0,menu_pick1=0,menu_pick2=0,state = 0,back_menu=0,led_state = 0,led2=0;
+uint8_t menu_sec=0,menu_say=0,menu_pick1=0,menu_pick2=0,aq = 0,back_menu=0,led_state = 0,led2=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,6 +67,8 @@ void baslangic(){
 	  N5110_PrintStr(3, 5, "LED MENU 1", true);
 	  N5110_SetFont(SmallFont);
 	  N5110_PrintStr(3, 21, "LED MENU 2", true);
+	  /*N5110_SetFont(SmallFont);
+	  N5110_PrintStr(3, 37, "LED 3 AC!", true);*/
 }
 void backmenu(){
 	  N5110_Clear();
@@ -79,12 +81,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			menu_say = 1;
 		//////////////////////////////////
 
-		if(state == 2){
+		if(aq == 2){
 			menu_pick1++;
 			if(menu_pick1 == 3)
 				menu_pick1 = 0;
 		}
-		if(state == 3){
+		if(aq == 3){
 			menu_pick2++;
 			if(menu_pick2 == 3)
 			menu_pick2 = 0;
@@ -100,12 +102,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
 			///////////////////////////
 
-			if(state == 2){
+			if(aq == 2){
 				menu_pick1--;
 				if(menu_pick1 < 0)
 					menu_pick1 = 0;
 			}
-			if(state == 3){
+			if(aq == 3){
 				menu_pick2--;
 			if(menu_pick2 < 0)
 				menu_pick2 = 0;
@@ -156,6 +158,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, RESET);
 		}
 
+
+		/*if(menu_say == 1){
+			if(menu_pick2 == 2){
+				menu_sec = 0;
+			    led_state = 0;
+			}
+		if(menu_pick2 == 0)
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, SET);
+		if(menu_pick2 == 1)
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, RESET);
+
+		}*/
 
 	}
 }
@@ -210,7 +224,7 @@ int main(void)
 	  if(menu_sec == 1){
 
 		  if(menu_say == 0){
-			  	  	  	state = 2;
+			  	  	  	aq = 2;
 			  	  	  	if(menu_pick1 == 0){
 				  			N5110_Clear();
 					       	N5110_DrawHLine(0, 0, N5110_MAX_WIDTH, true);
@@ -265,7 +279,7 @@ int main(void)
 
 			  	else if(menu_say == 1)
 			  	{
-			  	     	state = 3;
+			  	     	aq = 3;
 			  	     	if(menu_pick2 == 0){
 			  	  				  			N5110_Clear();
 			  	  					       	N5110_DrawHLine(0, 0, N5110_MAX_WIDTH, true);
